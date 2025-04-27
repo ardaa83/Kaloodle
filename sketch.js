@@ -1,58 +1,79 @@
 let symmetry = 6;
-let angle;
-let strokeColor = '#FF0000'; // Başlangıç rengi (kırmızı)
-let clearCanvas = false;
+let currentColor;
+let autoColorMode = false;
 
 function setup() {
-  const canvas = createCanvas(600, 600);
+  let canvas = createCanvas(600, 600);
   canvas.parent('canvas-container');
   angleMode(DEGREES);
-  background(50);
-  angle = 360 / symmetry;
+  background(255);
 
-  // Renk seçici
-  document.getElementById('color-picker').addEventListener('input', (e) => {
-    strokeColor = e.target.value;
+  currentColor = color('#FF0000');
+
+  const colorPicker = select('#color-picker');
+  const randomColorBtn = select('#random-color');
+  const clearBtn = select('#clear-btn');
+  const symmetrySlider = select('#symmetry-slider');
+  const autoColorBtn = select('#auto-color-btn');
+
+  colorPicker.input(() => {
+    currentColor = color(colorPicker.value());
   });
 
-  // Rastgele renk butonu
-  document.getElementById('random-color').addEventListener('click', () => {
-    strokeColor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
-    document.getElementById('color-picker').value = strokeColor;
+  randomColorBtn.mousePressed(() => {
+    currentColor = color(random(255), random(255), random(255));
   });
 
-  // Temizle butonu
-  document.getElementById('clear-btn').addEventListener('click', () => {
-    clearCanvas = true;
+  clearBtn.mousePressed(() => {
+    background(255);
   });
 
-  // Simetri ayarı
-  document.getElementById('symmetry-slider').addEventListener('input', (e) => {
-    symmetry = parseInt(e.target.value);
-    document.getElementById('symmetry-value').textContent = symmetry;
-    angle = 360 / symmetry;
+  symmetrySlider.input(() => {
+    symmetry = symmetrySlider.value();
+    select('#symmetry-value').html(symmetry);
+  });
+
+  autoColorBtn.mousePressed(() => {
+    autoColorMode = !autoColorMode;
+    if (autoColorMode) {
+      autoColorBtn.html('Otomatik Renk: Açık');
+    } else {
+      autoColorBtn.html('Otomatik Renk: Kapalı');
+    }
   });
 }
 
 function draw() {
-  translate(width / 2, height / 2);
-  
-  if (clearCanvas) {
-    background(50);
-    clearCanvas = false;
+  // draw boş kalacak
+}
+
+function mouseDragged() {
+  if (autoColorMode) {
+    currentColor = color(random(255), random(255), random(255));
   }
-  
-  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height && mouseIsPressed) {
-    stroke(strokeColor);
-    strokeWeight(3);
-    
-    for (let i = 0; i < symmetry; i++) {
-      rotate(angle);
-      line(mouseX - width/2, mouseY - height/2, pmouseX - width/2, pmouseY - height/2);
-      push();
-      scale(1, -1);
-      line(mouseX - width/2, mouseY - height/2, pmouseX - width/2, pmouseY - height/2);
-      pop();
-    }
+
+  stroke(currentColor);
+  strokeWeight(2);
+
+  let centerX = width / 2;
+  let centerY = height / 2;
+
+  let mx = mouseX - centerX;
+  let my = mouseY - centerY;
+  let pmx = pmouseX - centerX;
+  let pmy = pmouseY - centerY;
+
+  push(); // Çizimi korumak için push/pop kullanıyoruz
+  translate(centerX, centerY);
+
+  for (let i = 0; i < symmetry; i++) {
+    rotate(360 / symmetry);
+    line(mx, my, pmx, pmy);
+    push();
+    scale(1, -1);
+    line(mx, my, pmx, pmy);
+    pop();
   }
+
+  pop();
 }
