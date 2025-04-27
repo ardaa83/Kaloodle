@@ -44,36 +44,38 @@ function setup() {
 }
 
 function draw() {
-  // draw boş kalacak
+  // Boş bırakıyoruz
 }
 
 function mouseDragged() {
-  if (autoColorMode) {
-    currentColor = color(random(255), random(255), random(255));
-  }
+  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) { // sadece tuvaldeyken çiz
+    if (autoColorMode) {
+      currentColor = color(random(255), random(255), random(255));
+    }
 
-  stroke(currentColor);
-  strokeWeight(2);
+    stroke(currentColor);
+    strokeWeight(2);
 
-  let centerX = width / 2;
-  let centerY = height / 2;
+    let centerX = width / 2;
+    let centerY = height / 2;
 
-  let mx = mouseX - centerX;
-  let my = mouseY - centerY;
-  let pmx = pmouseX - centerX;
-  let pmy = pmouseY - centerY;
+    let mx = mouseX - centerX;
+    let my = mouseY - centerY;
+    let pmx = pmouseX - centerX;
+    let pmy = pmouseY - centerY;
 
-  push(); // Çizimi korumak için push/pop kullanıyoruz
-  translate(centerX, centerY);
-
-  for (let i = 0; i < symmetry; i++) {
-    rotate(360 / symmetry);
-    line(mx, my, pmx, pmy);
     push();
-    scale(1, -1);
-    line(mx, my, pmx, pmy);
+    translate(centerX, centerY);
+
+    for (let i = 0; i < symmetry; i++) {
+      rotate(360 / symmetry);
+      line(mx, my, pmx, pmy);
+      push();
+      scale(1, -1);
+      line(mx, my, pmx, pmy);
+      pop();
+    }
+
     pop();
   }
-
-  pop();
 }
