@@ -34,7 +34,7 @@ function setup() {
 
 
   clearBtn.mousePressed(() => {
-    background(255);
+    background(50);
   });
 
   symmetrySlider.input(() => {
