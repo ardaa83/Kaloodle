@@ -20,14 +20,19 @@ function setup() {
     currentColor = color(colorPicker.value());
   });
 
- randomColorBtn.mousePressed(() => {
-  let r = floor(random(255));
-  let g = floor(random(255));
-  let b = floor(random(255));
-  currentColor = color(r, g, b);
-  colorPicker.value(`#${hex(r, 2)}${hex(g, 2)}${hex(b, 2)}`);
-});
-
+  randomColorBtn.mousePressed(() => {
+    let r = floor(random(255));
+    let g = floor(random(255));
+    let b = floor(random(255));
+    currentColor = color(r, g, b);
+    
+    // Renk seçiciyi güncelle
+    let hexColor = '#' + 
+      nf(r, 2, 0, 16) + 
+      nf(g, 2, 0, 16) + 
+      nf(b, 2, 0, 16);
+    colorPicker.value(hexColor);
+  });
 
   clearBtn.mousePressed(() => {
     background(255);
@@ -53,7 +58,7 @@ function draw() {
 }
 
 function mouseDragged() {
-  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) { // sadece tuvaldeyken çiz
+  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
     if (autoColorMode) {
       currentColor = color(random(255), random(255), random(255));
     }
