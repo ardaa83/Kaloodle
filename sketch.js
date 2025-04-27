@@ -26,10 +26,11 @@ function setup() {
   let b = floor(random(255));
   currentColor = color(r, g, b);
 
-  // colorPicker'a hex kodunu düzgün atıyoruz
-  let hexColor = `#${nfc(r, 2)}${nfc(g, 2)}${nfc(b, 2)}`;
+  // RGB değerini hex formatına çevirelim ve color picker'a gönderelim
+  let hexColor = "#" + hex(r, 2) + hex(g, 2) + hex(b, 2);
   colorPicker.value(hexColor);
 });
+
 
 
   clearBtn.mousePressed(() => {
