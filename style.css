@@ -10,6 +10,14 @@ h1 {
   color: #333;
 }
 
+#main-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+
 #canvas-container {
   margin: 20px auto;
 }
