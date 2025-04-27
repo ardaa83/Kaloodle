@@ -20,19 +20,17 @@ function setup() {
     currentColor = color(colorPicker.value());
   });
 
-  randomColorBtn.mousePressed(() => {
-    let r = floor(random(255));
-    let g = floor(random(255));
-    let b = floor(random(255));
-    currentColor = color(r, g, b);
-    
-    // Renk seçiciyi güncelle
-    let hexColor = '#' + 
-      nf(r, 2, 0, 16) + 
-      nf(g, 2, 0, 16) + 
-      nf(b, 2, 0, 16);
-    colorPicker.value(hexColor);
-  });
+ randomColorBtn.mousePressed(() => {
+  let r = floor(random(255));
+  let g = floor(random(255));
+  let b = floor(random(255));
+  currentColor = color(r, g, b);
+
+  // colorPicker'a hex kodunu düzgün atıyoruz
+  let hexColor = `#${nfc(r, 2)}${nfc(g, 2)}${nfc(b, 2)}`;
+  colorPicker.value(hexColor);
+});
+
 
   clearBtn.mousePressed(() => {
     background(255);
