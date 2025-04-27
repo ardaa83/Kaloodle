@@ -6,7 +6,7 @@ function setup() {
   let canvas = createCanvas(600, 600);
   canvas.parent('canvas-container');
   angleMode(DEGREES);
-  background(255);
+  background(150, 150, 150);
 
   currentColor = color('#FF0000');
 
