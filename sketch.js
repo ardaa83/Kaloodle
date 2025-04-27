@@ -20,9 +20,14 @@ function setup() {
     currentColor = color(colorPicker.value());
   });
 
-  randomColorBtn.mousePressed(() => {
-    currentColor = color(random(255), random(255), random(255));
-  });
+ randomColorBtn.mousePressed(() => {
+  let r = floor(random(255));
+  let g = floor(random(255));
+  let b = floor(random(255));
+  currentColor = color(r, g, b);
+  colorPicker.value(`#${hex(r, 2)}${hex(g, 2)}${hex(b, 2)}`);
+});
+
 
   clearBtn.mousePressed(() => {
     background(255);
