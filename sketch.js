@@ -50,16 +50,29 @@ function setup() {
 
 function drawFoggyBackground() {
   noStroke();
+  noiseSeed(floor(random(10000))); // Her seferinde farklı noise
 
   for (let x = 0; x < width; x += 4) {
     for (let y = 0; y < height; y += 4) {
       let n = noise(x * 0.01, y * 0.01);
-      let col = lerpColor(color(30, 80, 30), color(0, 0, 0), n);
+      
+      // Rastgele bir temel renk tonu oluştur
+      let baseHue = random(360); // 0 - 360 arasında bir renk tonu
+      
+      // Rengi HSB (Ton, Doygunluk, Parlaklık) olarak tanımla
+      colorMode(HSB, 360, 100, 100);
+      let col = color(
+        (baseHue + n * 60) % 360,  // Ton
+        60 + n * 40,               // Doygunluk
+        30 + n * 60                // Parlaklık
+      );
       fill(col);
       rect(x, y, 4, 4);
     }
   }
+  colorMode(RGB); // Eski moda dön, aksi halde diğer renkler bozulur
 }
+
 
 
 function draw() {
