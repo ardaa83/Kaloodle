@@ -53,9 +53,7 @@ function draw() {
 }
 
 function mouseDragged() {
-  // Sadece tuval alanında işlem yap
   if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-    // Otomatik renk modunda neon renkleri parlak uçlarda olacak şekilde ayarlıyoruz
     if (autoColorMode) {
       let r = floor(random(128, 255));
       let g = floor(random(128, 255));
@@ -63,12 +61,12 @@ function mouseDragged() {
       currentColor = color(r, g, b);
     }
 
+    // Hız hesaplama
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
-    let thickness = map(speed, 0, 30, 8, 1, true);
+    let thickness = map(speed, 0, 30, 10, 1, true); // yavaşta kalın, hızlıda ince
 
     let centerX = width / 2;
     let centerY = height / 2;
-    // Fare konumunu tuvalin merkezine göre ayarla
     let mx = mouseX - centerX;
     let my = mouseY - centerY;
     let pmx = pmouseX - centerX;
@@ -80,20 +78,21 @@ function mouseDragged() {
     for (let i = 0; i < symmetry; i++) {
       rotate(360 / symmetry);
 
-      // Neon Glow Efekti: drawingContext üzerinden shadow özelliğini kullanıyoruz
-      drawingContext.shadowBlur = 10;           // Glow yayılım miktarı (isteğe bağlı artırılabilir)
-      drawingContext.shadowColor = currentColor;  // Işık rengi currentColor
+      // Glow (neon) efekti
+      drawingContext.shadowBlur = 20;
+      drawingContext.shadowColor = currentColor;
 
-      stroke(currentColor);
-      strokeWeight(2);
-      line(pmx, pmy, mx, my);
+      noStroke();
+      fill(currentColor);
+
+      // Dolma kalem benzeri çizim: kalınlığı hızla belirlenen daire izleri
+      ellipse(mx, my, thickness, thickness);
 
       push();
       scale(1, -1);
-      line(pmx, pmy, mx, my);
+      ellipse(mx, my, thickness, thickness);
       pop();
 
-      // Glow efektinin diğer çizimleri etkilemesini engellemek için sıfırla
       drawingContext.shadowBlur = 0;
     }
 
