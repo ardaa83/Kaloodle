@@ -63,6 +63,9 @@ function mouseDragged() {
       currentColor = color(r, g, b);
     }
 
+    let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
+    let thickness = map(speed, 0, 30, 8, 1, true);
+
     let centerX = width / 2;
     let centerY = height / 2;
     // Fare konumunu tuvalin merkezine göre ayarla
