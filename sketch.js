@@ -95,11 +95,17 @@ function mouseDragged() {
     let my = mouseY - centerY;
     let pmx = pmouseX - centerX;
     let pmy = pmouseY - centerY;
+    
 
     push();
     translate(centerX, centerY);
 
-    for (let i = 0; i < symmetry; i++) {
+    
+    if (symmetry == 1) {
+      line(mx, my, pmx, pmy);}
+    else {
+    
+      for (let i = 0; i < symmetry; i++) {
       rotate(360 / symmetry);
 
       drawingContext.shadowBlur = 15;
@@ -116,8 +122,8 @@ function mouseDragged() {
       pop();
 
       drawingContext.shadowBlur = 0;
+     }
     }
-
     pop();
   }
 }
