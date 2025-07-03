@@ -35,7 +35,7 @@ function setup() {
   });
 
   symmetrySlider.input(() => {
-    symmetry = symmetrySlider.value();
+    symmetry = int(symmetrySlider.value());
     select('#symmetry-value').html(symmetry);
   });
 
@@ -70,10 +70,8 @@ function drawFoggyBackground() {
   }
 }
 
-
-
-
 function draw() {
+  // Boş, çünkü çizim mouseDragged ile yapılıyor
 }
 
 function mouseDragged() {
@@ -86,7 +84,6 @@ function mouseDragged() {
     }
 
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
-
     let thickness = map(speed, 0, 20, 2.4, 1.2, true);
 
     let centerX = width / 2;
@@ -95,19 +92,12 @@ function mouseDragged() {
     let my = mouseY - centerY;
     let pmx = pmouseX - centerX;
     let pmy = pmouseY - centerY;
-    
 
     push();
     translate(centerX, centerY);
 
-    
-    if (symmetry == 1) {
-      line(mx, my, pmx, pmy);}
-    else {
-    
-      for (let i = 0; i < symmetry; i++) {
-      rotate(360 / symmetry);
-
+    if (symmetry === 1) {
+      // Simetrisiz tek çizim
       drawingContext.shadowBlur = 15;
       drawingContext.shadowColor = currentColor;
 
@@ -116,14 +106,28 @@ function mouseDragged() {
       strokeCap(ROUND);
       line(pmx, pmy, mx, my);
 
-      push();
-      scale(1, -1);
-      line(pmx, pmy, mx, my);
-      pop();
-
       drawingContext.shadowBlur = 0;
-     }
+    } else {
+      for (let i = 0; i < symmetry; i++) {
+        rotate(360 / symmetry);
+
+        drawingContext.shadowBlur = 15;
+        drawingContext.shadowColor = currentColor;
+
+        stroke(currentColor);
+        strokeWeight(thickness);
+        strokeCap(ROUND);
+        line(pmx, pmy, mx, my);
+
+        push();
+        scale(1, -1);
+        line(pmx, pmy, mx, my);
+        pop();
+
+        drawingContext.shadowBlur = 0;
+      }
     }
+
     pop();
   }
 }
