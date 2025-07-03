@@ -6,7 +6,7 @@ function setup() {
   let canvas = createCanvas(600, 600);
   canvas.parent('canvas-container');
   angleMode(DEGREES);
-  background(50); // Gri arka plan
+  drawFoggyBackground();
 
   currentColor = color('#FF0000');
 
@@ -34,7 +34,7 @@ function setup() {
 
   // Temizle butonu: arka plan gri olarak ayarlanıyor
   clearBtn.mousePressed(() => {
-    background(50);
+    drawFoggyBackground();
   });
 
   symmetrySlider.input(() => {
@@ -47,6 +47,20 @@ function setup() {
     autoColorBtn.html(autoColorMode ? 'Otomatik Renk: Açık' : 'Otomatik Renk: Kapalı');
   });
 }
+
+function drawFoggyBackground() {
+  noStroke();
+
+  for (let x = 0; x < width; x += 4) {
+    for (let y = 0; y < height; y += 4) {
+      let n = noise(x * 0.01, y * 0.01);
+      let col = lerpColor(color(30, 80, 30), color(0, 0, 0), n);
+      fill(col);
+      rect(x, y, 4, 4);
+    }
+  }
+}
+
 
 function draw() {
   // draw boş bırakılıyor
