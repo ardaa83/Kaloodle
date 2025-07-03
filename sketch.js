@@ -6,7 +6,7 @@ function setup() {
   let canvas = createCanvas(600, 600);
   canvas.parent('canvas-container');
   angleMode(DEGREES);
-  background(50);
+  background(50); // Gri arka plan
 
   currentColor = color('#FF0000');
 
@@ -16,21 +16,23 @@ function setup() {
   const symmetrySlider = select('#symmetry-slider');
   const autoColorBtn = select('#auto-color-btn');
 
+  // Renk seçici güncellemesi
   colorPicker.input(() => {
     currentColor = color(colorPicker.value());
   });
 
+  // Rastgele renk butonu: hem currentColor hem de renk seçiciyi güncelliyoruz
   randomColorBtn.mousePressed(() => {
     let r = floor(random(255));
     let g = floor(random(255));
     let b = floor(random(255));
     currentColor = color(r, g, b);
 
-    // Renk seçiciye düzgün HEX değeri ver
     let hexColor = "#" + hex(r, 2) + hex(g, 2) + hex(b, 2);
     colorPicker.value(hexColor);
   });
 
+  // Temizle butonu: arka plan gri olarak ayarlanıyor
   clearBtn.mousePressed(() => {
     background(50);
   });
@@ -47,11 +49,13 @@ function setup() {
 }
 
 function draw() {
-  // boş
+  // draw boş bırakılıyor
 }
 
 function mouseDragged() {
+  // Sadece tuval alanında işlem yap
   if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+    // Otomatik renk modunda neon renkleri parlak uçlarda olacak şekilde ayarlıyoruz
     if (autoColorMode) {
       let r = floor(random(128, 255));
       let g = floor(random(128, 255));
@@ -61,6 +65,7 @@ function mouseDragged() {
 
     let centerX = width / 2;
     let centerY = height / 2;
+    // Fare konumunu tuvalin merkezine göre ayarla
     let mx = mouseX - centerX;
     let my = mouseY - centerY;
     let pmx = pmouseX - centerX;
@@ -72,28 +77,21 @@ function mouseDragged() {
     for (let i = 0; i < symmetry; i++) {
       rotate(360 / symmetry);
 
-      // Neon efekti: önce parlak dış çizgi (hafif saydam ve kalın)
-      stroke(currentColor.levels[0], currentColor.levels[1], currentColor.levels[2], 50);
-      strokeWeight(20);
-      line(pmx, pmy, mx, my);
+      // Neon Glow Efekti: drawingContext üzerinden shadow özelliğini kullanıyoruz
+      drawingContext.shadowBlur = 40;           // Glow yayılım miktarı (isteğe bağlı artırılabilir)
+      drawingContext.shadowColor = currentColor;  // Işık rengi currentColor
 
-      // Sonra içteki ince net çizgi
       stroke(currentColor);
       strokeWeight(2);
       line(pmx, pmy, mx, my);
 
-      // Yansımalı çizim
       push();
       scale(1, -1);
-
-      stroke(currentColor.levels[0], currentColor.levels[1], currentColor.levels[2], 50);
-      strokeWeight(20);
-      line(pmx, pmy, mx, my);
-
-      stroke(currentColor);
-      strokeWeight(2);
       line(pmx, pmy, mx, my);
       pop();
+
+      // Glow efektinin diğer çizimleri etkilemesini engellemek için sıfırla
+      drawingContext.shadowBlur = 0;
     }
 
     pop();
