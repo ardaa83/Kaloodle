@@ -16,12 +16,10 @@ function setup() {
   const symmetrySlider = select('#symmetry-slider');
   const autoColorBtn = select('#auto-color-btn');
 
-  // Renk seçici güncellemesi
   colorPicker.input(() => {
     currentColor = color(colorPicker.value());
   });
 
-  // Rastgele renk butonu: hem currentColor hem de renk seçiciyi güncelliyoruz
   randomColorBtn.mousePressed(() => {
     let r = floor(random(255));
     let g = floor(random(255));
@@ -32,7 +30,6 @@ function setup() {
     colorPicker.value(hexColor);
   });
 
-  // Temizle butonu: arka plan gri olarak ayarlanıyor
   clearBtn.mousePressed(() => {
     drawFoggyBackground();
   });
@@ -49,32 +46,36 @@ function setup() {
 }
 
 function drawFoggyBackground() {
+  background(20); // Koyu arka plan
+
+  // Rastgele baz renk (RGB)
+  let baseR = random(100, 255);
+  let baseG = random(100, 255);
+  let baseB = random(100, 255);
+
+  // Tüm canvas boyunca yarı saydam yumuşak renkli bulut efekti
   noStroke();
-  noiseSeed(floor(random(10000))); // her seferinde farklı desen
+  noiseSeed(floor(random(10000))); // Her sefer için farklı desen
 
-  background(20); // Koyu siyahımsı zemin
+  for (let x = 0; x < width; x += 3) {
+    for (let y = 0; y < height; y += 3) {
+      let n = noise(x * 0.01, y * 0.01); // Yumuşak noise
+      let alpha = map(n, 0, 1, 10, 60); // Saydamlık farkı
 
-  // Rastgele hafif bir renk tonu seç (soft)
-  let fogHue = random(360); // HSB renk tonları
-  colorMode(HSB, 360, 100, 100); // Ton, doygunluk, parlaklık
+      let r = baseR * n;
+      let g = baseG * n;
+      let b = baseB * n;
 
-  for (let x = 0; x < width; x += 4) {
-    for (let y = 0; y < height; y += 4) {
-      let n = noise(x * 0.01, y * 0.01); // yumuşak geçişler
-      let alpha = map(n, 0, 1, 10, 40); // daha saydam buğular
-      let c = color(fogHue, 40, 80, alpha); // düşük doygunluk & parlaklık
-      fill(c);
-      rect(x, y, 4, 4);
+      fill(r, g, b, alpha);
+      rect(x, y, 3, 3);
     }
   }
-
-  colorMode(RGB); // HSB'den çık
 }
 
 
 
+
 function draw() {
-  // draw boş bırakılıyor
 }
 
 function mouseDragged() {
@@ -86,11 +87,8 @@ function mouseDragged() {
       currentColor = color(r, g, b);
     }
 
-    // Hız hesapla
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
 
-    // Yumuşak geçiş için sınırlı aralıkta map'le
-    // Yavaşta 3.5, hızlıda 1.2 gibi doğal bir fark
     let thickness = map(speed, 0, 20, 1.6, 1.2, true);
 
     let centerX = width / 2;
