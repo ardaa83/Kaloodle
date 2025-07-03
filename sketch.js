@@ -85,8 +85,8 @@ function mouseDragged() {
     stroke(currentColor);
 
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
-    let weight = map(speed, 0, 50, 8, 1, true);
-    strokeWeight(weight);
+    let thickness = map(speed, 0, 20, 2.4, 1.2, true);
+    strokeWeight(thickness);
 
     let centerX = width / 2;
     let centerY = height / 2;
