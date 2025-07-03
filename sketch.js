@@ -91,7 +91,7 @@ function mouseDragged() {
 
     // Yumuşak geçiş için sınırlı aralıkta map'le
     // Yavaşta 3.5, hızlıda 1.2 gibi doğal bir fark
-    let thickness = map(speed, 0, 20, 3.0, 1.2, true);
+    let thickness = map(speed, 0, 20, 1.6, 1.2, true);
 
     let centerX = width / 2;
     let centerY = height / 2;
