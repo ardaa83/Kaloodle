@@ -20,18 +20,16 @@ function setup() {
     currentColor = color(colorPicker.value());
   });
 
- randomColorBtn.mousePressed(() => {
-  let r = floor(random(255));
-  let g = floor(random(255));
-  let b = floor(random(255));
-  currentColor = color(r, g, b);
+  randomColorBtn.mousePressed(() => {
+    let r = floor(random(255));
+    let g = floor(random(255));
+    let b = floor(random(255));
+    currentColor = color(r, g, b);
 
-  // RGB değerini hex formatına çevirelim ve color picker'a gönderelim
-  let hexColor = "#" + hex(r, 2) + hex(g, 2) + hex(b, 2);
-  colorPicker.value(hexColor);
-});
-
-
+    // Renk seçiciye düzgün HEX değeri ver
+    let hexColor = "#" + hex(r, 2) + hex(g, 2) + hex(b, 2);
+    colorPicker.value(hexColor);
+  });
 
   clearBtn.mousePressed(() => {
     background(50);
@@ -44,30 +42,25 @@ function setup() {
 
   autoColorBtn.mousePressed(() => {
     autoColorMode = !autoColorMode;
-    if (autoColorMode) {
-      autoColorBtn.html('Otomatik Renk: Açık');
-    } else {
-      autoColorBtn.html('Otomatik Renk: Kapalı');
-    }
+    autoColorBtn.html(autoColorMode ? 'Otomatik Renk: Açık' : 'Otomatik Renk: Kapalı');
   });
 }
 
 function draw() {
-  // Boş bırakıyoruz
+  // boş
 }
 
 function mouseDragged() {
   if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
     if (autoColorMode) {
-      currentColor = color(random(255), random(255), random(255));
+      let r = floor(random(128, 255));
+      let g = floor(random(128, 255));
+      let b = floor(random(128, 255));
+      currentColor = color(r, g, b);
     }
-
-    stroke(currentColor);
-    strokeWeight(2);
 
     let centerX = width / 2;
     let centerY = height / 2;
-
     let mx = mouseX - centerX;
     let my = mouseY - centerY;
     let pmx = pmouseX - centerX;
@@ -78,10 +71,28 @@ function mouseDragged() {
 
     for (let i = 0; i < symmetry; i++) {
       rotate(360 / symmetry);
-      line(mx, my, pmx, pmy);
+
+      // Neon efekti: önce parlak dış çizgi (hafif saydam ve kalın)
+      stroke(currentColor.levels[0], currentColor.levels[1], currentColor.levels[2], 50);
+      strokeWeight(20);
+      line(pmx, pmy, mx, my);
+
+      // Sonra içteki ince net çizgi
+      stroke(currentColor);
+      strokeWeight(2);
+      line(pmx, pmy, mx, my);
+
+      // Yansımalı çizim
       push();
       scale(1, -1);
-      line(mx, my, pmx, pmy);
+
+      stroke(currentColor.levels[0], currentColor.levels[1], currentColor.levels[2], 50);
+      strokeWeight(20);
+      line(pmx, pmy, mx, my);
+
+      stroke(currentColor);
+      strokeWeight(2);
+      line(pmx, pmy, mx, my);
       pop();
     }
 
