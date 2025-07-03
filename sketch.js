@@ -50,27 +50,27 @@ function setup() {
 
 function drawFoggyBackground() {
   noStroke();
-  noiseSeed(floor(random(10000))); // Her seferinde farklı noise
+  noiseSeed(floor(random(10000))); // Her seferde farklı desen
+
+  // Rastgele bir ana renk seç (kırmızı, yeşil, mavi, mor gibi)
+  let baseColors = [
+    color(200, 30, 30),   // kırmızımsı
+    color(30, 200, 30),   // yeşilimsi
+    color(30, 100, 200),  // mavimsi
+    color(120, 30, 200),  // morumsu
+    color(200, 100, 30)   // turuncumsu
+  ];
+  let baseColor = random(baseColors);
+  let bgColor = lerpColor(baseColor, color(0), 0.4); // biraz karartılmış hali
 
   for (let x = 0; x < width; x += 4) {
     for (let y = 0; y < height; y += 4) {
       let n = noise(x * 0.01, y * 0.01);
-      
-      // Rastgele bir temel renk tonu oluştur
-      let baseHue = random(360); // 0 - 360 arasında bir renk tonu
-      
-      // Rengi HSB (Ton, Doygunluk, Parlaklık) olarak tanımla
-      colorMode(HSB, 360, 100, 100);
-      let col = color(
-        (baseHue + n * 60) % 360,  // Ton
-        60 + n * 40,               // Doygunluk
-        30 + n * 60                // Parlaklık
-      );
-      fill(col);
+      let fogColor = lerpColor(baseColor, bgColor, n);
+      fill(fogColor);
       rect(x, y, 4, 4);
     }
   }
-  colorMode(RGB); // Eski moda dön, aksi halde diğer renkler bozulur
 }
 
 
