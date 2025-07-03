@@ -46,21 +46,19 @@ function setup() {
 }
 
 function drawFoggyBackground() {
-  background(20); // Koyu arka plan
+  background(20);
 
-  // Rastgele baz renk (RGB)
   let baseR = random(100, 255);
   let baseG = random(100, 255);
   let baseB = random(100, 255);
 
-  // Tüm canvas boyunca yarı saydam yumuşak renkli bulut efekti
   noStroke();
-  noiseSeed(floor(random(10000))); // Her sefer için farklı desen
+  noiseSeed(floor(random(10000)));
 
   for (let x = 0; x < width; x += 3) {
     for (let y = 0; y < height; y += 3) {
-      let n = noise(x * 0.01, y * 0.01); // Yumuşak noise
-      let alpha = map(n, 0, 1, 10, 60); // Saydamlık farkı
+      let n = noise(x * 0.01, y * 0.01);
+      let alpha = map(n, 0, 1, 10, 60);
 
       let r = baseR * n;
       let g = baseG * n;
@@ -89,7 +87,7 @@ function mouseDragged() {
 
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
 
-    let thickness = map(speed, 0, 20, 1.6, 1.2, true);
+    let thickness = map(speed, 0, 20, 2.4, 1.2, true);
 
     let centerX = width / 2;
     let centerY = height / 2;
