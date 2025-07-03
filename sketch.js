@@ -84,7 +84,6 @@ function mouseDragged() {
 
     stroke(currentColor);
 
-    // Çizim hızına göre stroke kalınlığı (dolma kalem etkisi)
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
     let weight = map(speed, 0, 50, 8, 1, true);
     strokeWeight(weight);
@@ -101,7 +100,6 @@ function mouseDragged() {
     translate(centerX, centerY);
 
     if (symmetry == 1) {
-      // Simetrisiz tek çizim
       line(mx, my, pmx, pmy);
     } else {
       for (let i = 0; i < symmetry; i++) {
