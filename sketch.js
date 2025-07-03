@@ -61,9 +61,12 @@ function mouseDragged() {
       currentColor = color(r, g, b);
     }
 
-    // Hız hesaplama
+    // Hız hesapla
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
-    let thickness = map(speed, 0, 30, 10, 1, true); // yavaşta kalın, hızlıda ince
+
+    // Yumuşak geçiş için sınırlı aralıkta map'le
+    // Yavaşta 3.5, hızlıda 1.2 gibi doğal bir fark
+    let thickness = map(speed, 0, 20, 3.5, 1.2, true);
 
     let centerX = width / 2;
     let centerY = height / 2;
@@ -78,19 +81,17 @@ function mouseDragged() {
     for (let i = 0; i < symmetry; i++) {
       rotate(360 / symmetry);
 
-      // Glow (neon) efekti
-      drawingContext.shadowBlur = 20;
+      drawingContext.shadowBlur = 15;
       drawingContext.shadowColor = currentColor;
 
-      noStroke();
-      fill(currentColor);
-
-      // Dolma kalem benzeri çizim: kalınlığı hızla belirlenen daire izleri
-      ellipse(mx, my, thickness, thickness);
+      stroke(currentColor);
+      strokeWeight(thickness);
+      strokeCap(ROUND);
+      line(pmx, pmy, mx, my);
 
       push();
       scale(1, -1);
-      ellipse(mx, my, thickness, thickness);
+      line(pmx, pmy, mx, my);
       pop();
 
       drawingContext.shadowBlur = 0;
@@ -99,3 +100,4 @@ function mouseDragged() {
     pop();
   }
 }
+
