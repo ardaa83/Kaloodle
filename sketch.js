@@ -79,18 +79,18 @@ function draw() {
 function mouseDragged() {
   if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
     if (autoColorMode) {
-      currentColor = color(random(255), random(255), random(255));
+      let r = floor(random(128, 255));
+      let g = floor(random(128, 255));
+      let b = floor(random(128, 255));
+      currentColor = color(r, g, b);
     }
 
-    stroke(currentColor);
-
     let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
+
     let thickness = map(speed, 0, 20, 2.4, 1.2, true);
-    strokeWeight(thickness);
 
     let centerX = width / 2;
     let centerY = height / 2;
-
     let mx = mouseX - centerX;
     let my = mouseY - centerY;
     let pmx = pmouseX - centerX;
@@ -99,17 +99,23 @@ function mouseDragged() {
     push();
     translate(centerX, centerY);
 
-    if (symmetry == 1) {
-      line(mx, my, pmx, pmy);
-    } else {
-      for (let i = 0; i < symmetry; i++) {
-        rotate(360 / symmetry);
-        line(mx, my, pmx, pmy);
-        push();
-        scale(1, -1);
-        line(mx, my, pmx, pmy);
-        pop();
-      }
+    for (let i = 0; i < symmetry; i++) {
+      rotate(360 / symmetry);
+
+      drawingContext.shadowBlur = 15;
+      drawingContext.shadowColor = currentColor;
+
+      stroke(currentColor);
+      strokeWeight(thickness);
+      strokeCap(ROUND);
+      line(pmx, pmy, mx, my);
+
+      push();
+      scale(1, -1);
+      line(pmx, pmy, mx, my);
+      pop();
+
+      drawingContext.shadowBlur = 0;
     }
 
     pop();
