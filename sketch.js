@@ -78,7 +78,7 @@ function mouseDragged() {
       rotate(360 / symmetry);
 
       // Neon Glow Efekti: drawingContext üzerinden shadow özelliğini kullanıyoruz
-      drawingContext.shadowBlur = 40;           // Glow yayılım miktarı (isteğe bağlı artırılabilir)
+      drawingContext.shadowBlur = 10;           // Glow yayılım miktarı (isteğe bağlı artırılabilir)
       drawingContext.shadowColor = currentColor;  // Işık rengi currentColor
 
       stroke(currentColor);
