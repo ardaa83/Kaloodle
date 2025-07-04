@@ -71,7 +71,6 @@ function drawFoggyBackground() {
 }
 
 function draw() {
-  // Boş, çünkü çizim mouseDragged ile yapılıyor
 }
 
 function mouseDragged() {
@@ -97,7 +96,6 @@ function mouseDragged() {
     translate(centerX, centerY);
 
     if (symmetry === 1) {
-      // Simetrisiz tek çizim
       drawingContext.shadowBlur = 15;
       drawingContext.shadowColor = currentColor;
 
