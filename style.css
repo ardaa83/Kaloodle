@@ -44,3 +44,46 @@ button {
 button:hover {
   background-color: #45a049;
 }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 200px; /* genişliği dilediğin gibi ayarla */
+  height: 6px;
+  background: #ccc;
+  border-radius: 3px;
+  padding: 0;
+  margin: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  margin-top: -5px; /* ortalamak için */
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  border: none;
+}
+
+/* Track kenar boşluklarını kapatmak için */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #ccc;
+  border-radius: 3px;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: #ccc;
+  border-radius: 3px;
+}
+
