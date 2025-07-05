@@ -2,6 +2,9 @@ let symmetry = 6;
 let currentColor;
 let autoColorMode = false;
 
+let paths = [];
+let currentPath = null;
+
 function setup() {
   let canvas = createCanvas(600, 600);
   canvas.parent('canvas-container');
@@ -31,6 +34,7 @@ function setup() {
   });
 
   clearBtn.mousePressed(() => {
+    paths = [];
     drawFoggyBackground();
   });
 
@@ -71,61 +75,75 @@ function drawFoggyBackground() {
 }
 
 function draw() {
+  background(20);
+  for (let path of paths) {
+    drawSymmetricPath(path);
+  }
+
+  if (currentPath) {
+    drawSymmetricPath(currentPath);
+  }
+}
+
+function drawSymmetricPath(path) {
+  push();
+  translate(width / 2, height / 2);
+  stroke(path.color);
+  strokeWeight(path.weight);
+  strokeCap(ROUND);
+  drawingContext.shadowBlur = 15;
+  drawingContext.shadowColor = path.color;
+
+  for (let pt of path.points) {
+    if (path.symmetry === 1) {
+      line(pt.px, pt.py, pt.x, pt.y);
+    } else {
+      for (let i = 0; i < path.symmetry; i++) {
+        rotate(360 / path.symmetry);
+        line(pt.px, pt.py, pt.x, pt.y);
+        push();
+        scale(1, -1);
+        line(pt.px, pt.py, pt.x, pt.y);
+        pop();
+      }
+    }
+  }
+
+  drawingContext.shadowBlur = 0;
+  pop();
 }
 
 function mouseDragged() {
   if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-    if (autoColorMode) {
-      let r = floor(random(128, 255));
-      let g = floor(random(128, 255));
-      let b = floor(random(128, 255));
-      currentColor = color(r, g, b);
+    if (!currentPath) {
+      let weight = map(dist(mouseX, mouseY, pmouseX, pmouseY), 0, 20, 2.4, 1.2, true);
+      currentPath = {
+        points: [],
+        color: autoColorMode ? color(random(128, 255), random(128, 255), random(128, 255)) : currentColor,
+        weight: weight,
+        symmetry: symmetry
+      };
+      paths.push(currentPath);
     }
 
-    let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
-    let thickness = map(speed, 0, 20, 2.4, 1.2, true);
+    const centerX = width / 2;
+    const centerY = height / 2;
 
-    let centerX = width / 2;
-    let centerY = height / 2;
-    let mx = mouseX - centerX;
-    let my = mouseY - centerY;
-    let pmx = pmouseX - centerX;
-    let pmy = pmouseY - centerY;
+    currentPath.points.push({
+      x: mouseX - centerX,
+      y: mouseY - centerY,
+      px: pmouseX - centerX,
+      py: pmouseY - centerY
+    });
+  }
+}
 
-    push();
-    translate(centerX, centerY);
+function mouseReleased() {
+  currentPath = null;
+}
 
-    if (symmetry === 1) {
-      drawingContext.shadowBlur = 15;
-      drawingContext.shadowColor = currentColor;
-
-      stroke(currentColor);
-      strokeWeight(thickness);
-      strokeCap(ROUND);
-      line(pmx, pmy, mx, my);
-
-      drawingContext.shadowBlur = 0;
-    } else {
-      for (let i = 0; i < symmetry; i++) {
-        rotate(360 / symmetry);
-
-        drawingContext.shadowBlur = 15;
-        drawingContext.shadowColor = currentColor;
-
-        stroke(currentColor);
-        strokeWeight(thickness);
-        strokeCap(ROUND);
-        line(pmx, pmy, mx, my);
-
-        push();
-        scale(1, -1);
-        line(pmx, pmy, mx, my);
-        pop();
-
-        drawingContext.shadowBlur = 0;
-      }
-    }
-
-    pop();
+function keyPressed() {
+  if ((key === 'z' || key === 'Z') && (keyIsDown(CONTROL) || keyIsDown(91))) {
+    paths.pop();
   }
 }
