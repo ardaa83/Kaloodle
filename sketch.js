@@ -2,11 +2,18 @@ let symmetry = 6;
 let currentColor;
 let autoColorMode = false;
 
+let pg; // p5.Graphics objesi
+let paths = [];
+let currentPath = null;
+
 function setup() {
   let canvas = createCanvas(600, 600);
   canvas.parent('canvas-container');
   angleMode(DEGREES);
-  drawFoggyBackground();
+
+  pg = createGraphics(width, height);
+  pg.angleMode(DEGREES);
+  drawFoggyBackground(pg);
 
   currentColor = color('#FF0000');
 
@@ -25,13 +32,13 @@ function setup() {
     let g = floor(random(255));
     let b = floor(random(255));
     currentColor = color(r, g, b);
-
-    let hexColor = "#" + hex(r, 2) + hex(g, 2) + hex(b, 2);
-    colorPicker.value(hexColor);
+    colorPicker.value("#" + hex(r, 2) + hex(g, 2) + hex(b, 2));
   });
 
   clearBtn.mousePressed(() => {
-    drawFoggyBackground();
+    paths = [];
+    pg.clear();
+    drawFoggyBackground(pg);
   });
 
   symmetrySlider.input(() => {
@@ -45,14 +52,14 @@ function setup() {
   });
 }
 
-function drawFoggyBackground() {
-  background(20);
+function drawFoggyBackground(gfx) {
+  gfx.background(20);
 
   let baseR = random(100, 255);
   let baseG = random(100, 255);
   let baseB = random(100, 255);
 
-  noStroke();
+  gfx.noStroke();
   noiseSeed(floor(random(10000)));
 
   for (let x = 0; x < width; x += 3) {
@@ -64,68 +71,90 @@ function drawFoggyBackground() {
       let g = baseG * n;
       let b = baseB * n;
 
-      fill(r, g, b, alpha);
-      rect(x, y, 3, 3);
+      gfx.fill(r, g, b, alpha);
+      gfx.rect(x, y, 3, 3);
     }
   }
 }
 
 function draw() {
+  image(pg, 0, 0);
+
+  if (currentPath) {
+    drawSymmetricPath(pg, currentPath);
+    currentPath = null; // path'i bir kez çizip bırak
+  }
+}
+
+function drawSymmetricPath(gfx, path) {
+  gfx.push();
+  gfx.translate(width / 2, height / 2);
+  gfx.stroke(path.color);
+  gfx.strokeWeight(path.weight);
+  gfx.strokeCap(ROUND);
+  gfx.drawingContext.shadowBlur = 15;
+  gfx.drawingContext.shadowColor = path.color;
+
+  for (let pt of path.points) {
+    if (path.symmetry === 1) {
+      gfx.line(pt.px, pt.py, pt.x, pt.y);
+    } else {
+      for (let i = 0; i < path.symmetry; i++) {
+        gfx.rotate(360 / path.symmetry);
+        gfx.line(pt.px, pt.py, pt.x, pt.y);
+        gfx.push();
+        gfx.scale(1, -1);
+        gfx.line(pt.px, pt.py, pt.x, pt.y);
+        gfx.pop();
+      }
+    }
+  }
+
+  gfx.drawingContext.shadowBlur = 0;
+  gfx.pop();
 }
 
 function mouseDragged() {
   if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-    if (autoColorMode) {
-      let r = floor(random(128, 255));
-      let g = floor(random(128, 255));
-      let b = floor(random(128, 255));
-      currentColor = color(r, g, b);
+    if (!currentPath) {
+      let weight = map(dist(mouseX, mouseY, pmouseX, pmouseY), 0, 20, 2.4, 1.2, true);
+      currentPath = {
+        points: [],
+        color: autoColorMode ? color(random(128, 255), random(128, 255), random(128, 255)) : currentColor,
+        weight: weight,
+        symmetry: symmetry
+      };
+      paths.push(currentPath);
     }
 
-    let speed = dist(mouseX, mouseY, pmouseX, pmouseY);
-    let thickness = map(speed, 0, 20, 2.4, 1.2, true);
+    const centerX = width / 2;
+    const centerY = height / 2;
 
-    let centerX = width / 2;
-    let centerY = height / 2;
-    let mx = mouseX - centerX;
-    let my = mouseY - centerY;
-    let pmx = pmouseX - centerX;
-    let pmy = pmouseY - centerY;
+    currentPath.points.push({
+      x: mouseX - centerX,
+      y: mouseY - centerY,
+      px: pmouseX - centerX,
+      py: pmouseY - centerY
+    });
+  }
+}
 
-    push();
-    translate(centerX, centerY);
+function mouseReleased() {
+  if (currentPath) {
+    drawSymmetricPath(pg, currentPath); // çizimi kalıcı hale getir
+    currentPath = null;
+  }
+}
 
-    if (symmetry === 1) {
-      drawingContext.shadowBlur = 15;
-      drawingContext.shadowColor = currentColor;
-
-      stroke(currentColor);
-      strokeWeight(thickness);
-      strokeCap(ROUND);
-      line(pmx, pmy, mx, my);
-
-      drawingContext.shadowBlur = 0;
-    } else {
-      for (let i = 0; i < symmetry; i++) {
-        rotate(360 / symmetry);
-
-        drawingContext.shadowBlur = 15;
-        drawingContext.shadowColor = currentColor;
-
-        stroke(currentColor);
-        strokeWeight(thickness);
-        strokeCap(ROUND);
-        line(pmx, pmy, mx, my);
-
-        push();
-        scale(1, -1);
-        line(pmx, pmy, mx, my);
-        pop();
-
-        drawingContext.shadowBlur = 0;
+function keyPressed() {
+  if ((key === 'z' || key === 'Z') && (keyIsDown(CONTROL) || keyIsDown(91))) {
+    if (paths.length > 0) {
+      paths.pop();
+      pg.clear();
+      drawFoggyBackground(pg);
+      for (let p of paths) {
+        drawSymmetricPath(pg, p);
       }
     }
-
-    pop();
   }
 }
