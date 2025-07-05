@@ -15,6 +15,7 @@ function setup() {
   const clearBtn = select('#clear-btn');
   const symmetrySlider = select('#symmetry-slider');
   const autoColorBtn = select('#auto-color-btn');
+  const saveBtn = select('#save-btn');
 
   colorPicker.input(() => {
     currentColor = color(colorPicker.value());
@@ -42,6 +43,9 @@ function setup() {
   autoColorBtn.mousePressed(() => {
     autoColorMode = !autoColorMode;
     autoColorBtn.html(autoColorMode ? 'Otomatik Renk: Açık' : 'Otomatik Renk: Kapalı');
+  });
+  saveBtn.mousePressed(() => {
+  saveCanvas('cizim', 'png');
   });
 }
 
