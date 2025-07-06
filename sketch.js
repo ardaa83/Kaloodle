@@ -1,7 +1,27 @@
 let symmetry = 6;
 let currentColor;
 let autoColorMode = false;
+const translations = {
+  tr: {
+    randomColor: "Rastgele Renk",
+    clear: "Temizle",
+    autoColorOn: "Otomatik Renk: Açık",
+    autoColorOff: "Otomatik Renk: Kapalı"
+  },
+  en: {
+    randomColor: "Random Color",
+    clear: "Clear",
+    autoColorOn: "Auto Color: On",
+    autoColorOff: "Auto Color: Off"
+  }
+};
 let currentLanguage = 'tr';
+
+function updateLanguageTexts() {
+  select('#random-color').html(translations[currentLanguage].randomColor);
+  select('#clear-btn').html(translations[currentLanguage].clear);
+  select('#auto-color-btn').html(autoColorMode ? translations[currentLanguage].autoColorOn : translations[currentLanguage].autoColorOff);
+}
 
 function setup() {
   let canvas = createCanvas(600, 600);
@@ -22,20 +42,7 @@ function setup() {
     currentLanguage = langSelector.value();
     updateLanguageTexts();
   });
-  const translations = {
-  tr: {
-    randomColor: "Rastgele Renk",
-    clear: "Temizle",
-    autoColorOn: "Otomatik Renk: Açık",
-    autoColorOff: "Otomatik Renk: Kapalı"
-  },
-  en: {
-    randomColor: "Random Color",
-    clear: "Clear",
-    autoColorOn: "Auto Color: On",
-    autoColorOff: "Auto Color: Off"
-  }
-};
+  
 
   colorPicker.input(() => {
     currentColor = color(colorPicker.value());
@@ -68,12 +75,6 @@ function setup() {
   saveBtn.mousePressed(() => {
   saveCanvas('cizim', 'png');
   });
-}
-
-function updateLanguageTexts() {
-  select('#random-color').html(translations[currentLanguage].randomColor);
-  select('#clear-btn').html(translations[currentLanguage].clear);
-  select('#auto-color-btn').html(autoColorMode ? translations[currentLanguage].autoColorOn : translations[currentLanguage].autoColorOff);
 }
 
 function drawFoggyBackground() {
