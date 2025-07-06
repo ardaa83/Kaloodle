@@ -4,7 +4,7 @@ let autoColorMode = false;
 const translations = {
   tr: {
     randomColor: "Rastgele Renk",
-    : "Temizle",
+    clear: "Temizle",
     autoColorOn: "Otomatik Renk: Açık",
     autoColorOff: "Otomatik Renk: Kapalı",
     save: "Kaydet"
