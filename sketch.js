@@ -7,14 +7,16 @@ const translations = {
     clear: "Temizle",
     autoColorOn: "Otomatik Renk: Açık",
     autoColorOff: "Otomatik Renk: Kapalı",
-    save: "Kaydet"
+    save: "Kaydet",
+    symmetry: "Simetri:"
   },
   en: {
     randomColor: "Random Color",
     clear: "Clear",
     autoColorOn: "Auto Color: On",
     autoColorOff: "Auto Color: Off",
-    save: "Save"
+    save: "Save",
+    symmetry: "Symmetry:"
   }
 };
 let currentLanguage = 'tr';
@@ -23,6 +25,8 @@ function updateLanguageTexts() {
   select('#random-color').html(translations[currentLanguage].randomColor);
   select('#clear-btn').html(translations[currentLanguage].clear);
   select('#auto-color-btn').html(autoColorMode ? translations[currentLanguage].autoColorOn : translations[currentLanguage].autoColorOff);
+  select('#save-btn').html(translations[currentLanguage].save);
+  select('#symmetry-label').html(translations[currentLanguage].symmetry);
 }
 
 function setup() {
