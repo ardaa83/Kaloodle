@@ -47,7 +47,7 @@ button:hover {
 
 input[type="range"] {
   -webkit-appearance: none;
-  width: 200px; /* genişliği dilediğin gibi ayarla */
+  width: 200px;
   height: 6px;
   background: #ccc;
   border-radius: 3px;
@@ -62,7 +62,7 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 50%;
   background: #4CAF50;
   cursor: pointer;
-  margin-top: -5px; /* ortalamak için */
+  margin-top: -5px;
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -74,7 +74,6 @@ input[type="range"]::-moz-range-thumb {
   border: none;
 }
 
-/* Track kenar boşluklarını kapatmak için */
 input[type="range"]::-webkit-slider-runnable-track {
   height: 6px;
   background: #ccc;
