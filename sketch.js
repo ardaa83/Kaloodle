@@ -26,7 +26,7 @@ function updateLanguageTexts() {
   select('#clear-btn').html(translations[currentLanguage].clear);
   select('#auto-color-btn').html(autoColorMode ? translations[currentLanguage].autoColorOn : translations[currentLanguage].autoColorOff);
   select('#save-btn').html(translations[currentLanguage].save);
-  select('#symmetry-slider').html(translations[currentLanguage].symmetry);
+  select('#symmetry-label').html(translations[currentLanguage].symmetry);
 }
 
 function setup() {
