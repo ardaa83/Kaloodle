@@ -4,15 +4,17 @@ let autoColorMode = false;
 const translations = {
   tr: {
     randomColor: "Rastgele Renk",
-    clear: "Temizle",
+    : "Temizle",
     autoColorOn: "Otomatik Renk: Açık",
-    autoColorOff: "Otomatik Renk: Kapalı"
+    autoColorOff: "Otomatik Renk: Kapalı",
+    save: "Kaydet"
   },
   en: {
     randomColor: "Random Color",
     clear: "Clear",
     autoColorOn: "Auto Color: On",
-    autoColorOff: "Auto Color: Off"
+    autoColorOff: "Auto Color: Off",
+    save: "Save"
   }
 };
 let currentLanguage = 'tr';
